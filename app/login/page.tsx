@@ -110,13 +110,13 @@ export default function LoginPage() {
           <button className="w-full text-sm text-gray-500 underline underline-offset-2">
             Having trouble signing in?
           </button>
-
-          <p className="text-xs text-gray-500 mt-2">
-            Demo note: FM access is controlled by an allowlist in code (replace
-            with SSO roles in production).
-          </p>
+          
+    
         </div>
       </div>
     </main>
   );
 }
+
+// MVP stand-in for real SSO/Directory roles.
+// In production, roles would be derived from identity provider claims.
