@@ -111,7 +111,8 @@ export default function ReportPage() {
                       id="floor"
                       value={floor}
                       onChange={(e) => setFloor(Number(e.target.value) as Floor)}
-                      className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2
+                                 text-gray-900
                                  focus:outline-none focus:border-gray-600"
                     >
                       <option value={5}>Floor 5</option>
@@ -130,7 +131,8 @@ export default function ReportPage() {
                       id="zone"
                       value={zone}
                       onChange={(e) => setZone(e.target.value as Zone)}
-                      className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2
+                                 text-gray-900
                                  focus:outline-none focus:border-gray-600"
                     >
                       <option value="1-10">1–10</option>
@@ -212,6 +214,7 @@ export default function ReportPage() {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-3
+                               text-gray-900 placeholder:text-gray-400
                                focus:outline-none focus:border-gray-600"
                     placeholder="Anything else we should know?"
                   />

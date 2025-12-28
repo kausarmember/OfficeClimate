@@ -137,7 +137,9 @@ export default function FmDashboardPage() {
               setSelectedDate(iso);
               setSelectedCell(null);
             }}
-            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:border-gray-600"
+            className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2
+                       text-gray-900
+                       focus:outline-none focus:border-gray-600"
           />
           <p className="mt-2 text-xs text-gray-500">Showing reports for {dateLabel}.</p>
         </div>
