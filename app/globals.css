@@ -18,11 +18,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Ensure readable form control text on iOS Safari */
+/* Force readable typed text on iOS Safari */
 input,
 select,
 textarea {
-  color: #111827 !important;
+  color: #111827 !important; /* gray-900 */
   -webkit-text-fill-color: #111827 !important;
   opacity: 1 !important;
 }
+
+/* Restore placeholder hierarchy */
+::placeholder {
+  color: #9ca3af !important; /* gray-400 */
+  -webkit-text-fill-color: #9ca3af !important;
+}
+
