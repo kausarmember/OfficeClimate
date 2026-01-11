@@ -32,7 +32,7 @@ npm install
 npm run dev
 ```
 The application will be available at:
-http://localhost:3000/
+[http://localhost:3000/](https://redesigned-space-waffle-97gq694p775vh7rxr-3000.app.github.dev/login)
 
 ---
 
