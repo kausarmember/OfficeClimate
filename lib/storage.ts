@@ -54,15 +54,13 @@ export function getLatestReport(): ComfortReport | null {
 
 export function getReportsForDate(dateISO: string): ComfortReport[] {
   const reports = getReports();
-  const target = new Date(dateISO);
+  // Extract just the YYYY-MM-DD part from the ISO string
+  const targetDate = dateISO.split("T")[0];
 
   return reports.filter((r) => {
-    const d = new Date(r.createdAt);
-    return (
-      d.getFullYear() === target.getFullYear() &&
-      d.getMonth() === target.getMonth() &&
-      d.getDate() === target.getDate()
-    );
+    // Extract just the YYYY-MM-DD part from the report's createdAt
+    const reportDate = r.createdAt.split("T")[0];
+    return reportDate === targetDate;
   });
 }
 

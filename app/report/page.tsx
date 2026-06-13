@@ -11,13 +11,11 @@ type Comfort = "cold" | "comfortable" | "warm";
 export default function ReportPage() {
   const router = useRouter();
 
-  // Greeting (no name)
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
     return hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
   }, []);
 
-  // Date (UK format)
   const today = useMemo(() => {
     const d = new Date();
     return new Intl.DateTimeFormat("en-GB", {
@@ -31,8 +29,9 @@ export default function ReportPage() {
   const [floor, setFloor] = useState<Floor>(5);
   const [zone, setZone] = useState<Zone>("1-10");
   const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Tile styles (hover shadow, selected border matches icon colour)
   const baseTile =
     "w-full rounded-xl border bg-white px-4 py-6 transition shadow-sm " +
     "hover:shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400";
@@ -48,7 +47,6 @@ export default function ReportPage() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      {/* Top bar */}
       <header className="border-b border-gray-200 bg-white">
         <div className="px-6 py-6 flex items-center gap-2">
           <Image
@@ -68,7 +66,6 @@ export default function ReportPage() {
         <section className="flex justify-center">
           <div className="w-full max-w-3xl rounded-2xl border border-gray-200 bg-white shadow-sm">
             <div className="p-8">
-              {/* Greeting + date inside the card */}
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">{greeting}</p>
                 <p className="text-sm text-gray-500">{today}</p>
@@ -83,22 +80,30 @@ export default function ReportPage() {
                 onSubmit={(e) => {
                   e.preventDefault();
 
-                  const role = getRole() ?? "worker";
+                  if (isSubmitting) return;
+                  setIsSubmitting(true);
+                  setError(null);
 
-                  addReport({
-                    id: crypto.randomUUID(),
-                    role,
-                    floor,
-                    zone,
-                    comfort,
-                    comment: comment.trim() ? comment.trim() : undefined,
-                    createdAt: new Date().toISOString(),
-                  });
+                  try {
+                    const role = getRole() ?? "worker";
 
-                  router.push("/confirm");
+                    addReport({
+                      id: crypto.randomUUID(),
+                      role,
+                      floor,
+                      zone,
+                      comfort,
+                      comment: comment.trim() ? comment.trim() : undefined,
+                      createdAt: new Date().toISOString(),
+                    });
+
+                    router.push("/confirm");
+                  } catch (err) {
+                    setError("Failed to submit report. Please try again.");
+                    setIsSubmitting(false);
+                  }
                 }}
               >
-                {/* Floor & Seat range */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
                     <label
@@ -111,9 +116,11 @@ export default function ReportPage() {
                       id="floor"
                       value={floor}
                       onChange={(e) => setFloor(Number(e.target.value) as Floor)}
+                      disabled={isSubmitting}
                       className="w-full rounded-lg border border-gray-300 px-3 py-2
                                  text-gray-900
-                                 focus:outline-none focus:border-gray-600"
+                                 focus:outline-none focus:border-gray-600
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <option value={5}>Floor 5</option>
                       <option value={6}>Floor 6</option>
@@ -131,9 +138,11 @@ export default function ReportPage() {
                       id="zone"
                       value={zone}
                       onChange={(e) => setZone(e.target.value as Zone)}
+                      disabled={isSubmitting}
                       className="w-full rounded-lg border border-gray-300 px-3 py-2
                                  text-gray-900
-                                 focus:outline-none focus:border-gray-600"
+                                 focus:outline-none focus:border-gray-600
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <option value="1-10">1–10</option>
                       <option value="11-20">11–20</option>
@@ -143,20 +152,18 @@ export default function ReportPage() {
                   </div>
                 </div>
 
-                {/* Comfort selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     How does it feel in your current area?
                   </label>
 
-                  {/* ✅ Mobile-first: stack vertically. From sm up: 3 columns */}
                   <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 items-stretch">
-                    {/* Cold */}
                     <button
                       type="button"
                       aria-pressed={comfort === "cold"}
                       onClick={() => setComfort("cold")}
-                      className={tileClasses("cold")}
+                      disabled={isSubmitting}
+                      className={tileClasses("cold") + " disabled:opacity-50 disabled:cursor-not-allowed"}
                     >
                       <div className="flex flex-col items-center gap-3">
                         <span aria-hidden="true" className="text-7xl text-blue-600 leading-none">
@@ -166,12 +173,12 @@ export default function ReportPage() {
                       </div>
                     </button>
 
-                    {/* Comfortable */}
                     <button
                       type="button"
                       aria-pressed={comfort === "comfortable"}
                       onClick={() => setComfort("comfortable")}
-                      className={tileClasses("comfortable")}
+                      disabled={isSubmitting}
+                      className={tileClasses("comfortable") + " disabled:opacity-50 disabled:cursor-not-allowed"}
                     >
                       <div className="flex flex-col items-center gap-3">
                         <span aria-hidden="true" className="text-7xl text-emerald-600 leading-none">
@@ -183,12 +190,12 @@ export default function ReportPage() {
                       </div>
                     </button>
 
-                    {/* Warm */}
                     <button
                       type="button"
                       aria-pressed={comfort === "warm"}
                       onClick={() => setComfort("warm")}
-                      className={tileClasses("warm")}
+                      disabled={isSubmitting}
+                      className={tileClasses("warm") + " disabled:opacity-50 disabled:cursor-not-allowed"}
                     >
                       <div className="flex flex-col items-center gap-3">
                         <span aria-hidden="true" className="text-6xl text-orange-600 leading-none">
@@ -200,7 +207,12 @@ export default function ReportPage() {
                   </div>
                 </div>
 
-                {/* Comment */}
+                {error && (
+                  <p className="text-sm text-red-700" role="alert">
+                    {error}
+                  </p>
+                )}
+
                 <div>
                   <label
                     className="block text-sm font-medium text-gray-700"
@@ -213,19 +225,21 @@ export default function ReportPage() {
                     rows={3}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
+                    disabled={isSubmitting}
                     className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-3
                                text-gray-900 placeholder:text-gray-400
-                               focus:outline-none focus:border-gray-600"
+                               focus:outline-none focus:border-gray-600
+                               disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Anything else we should know?"
                   />
                 </div>
 
-                {/* Submit */}
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-purple-600 px-4 py-3 font-medium text-white hover:bg-purple-700"
+                  disabled={isSubmitting}
+                  className="w-full rounded-lg bg-purple-600 px-4 py-3 font-medium text-white hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Submit
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </form>
             </div>

@@ -54,10 +54,18 @@ function makeEmptyCell(floor: Floor, zone: Zone): HeatmapCell {
 export default function FmDashboardPage() {
   const router = useRouter();
 
-  // Guard: only FM should view this page
+  // Guard: Check role and prevent hydration mismatch
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const role = getRole();
-    if (role !== "fm") router.replace("/login");
+    if (role !== "fm") {
+      router.replace("/login");
+    } else {
+      setIsAuthorized(true);
+    }
+    setIsLoading(false);
   }, [router]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString());
@@ -78,6 +86,25 @@ export default function FmDashboardPage() {
     for (const c of cells) map.set(`${c.floor}-${c.zone}`, c);
     return map;
   }, [cells]);
+
+  // Handle Escape key to close comments panel
+  useEffect(() => {
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setSelectedCell(null);
+      }
+    }
+
+    if (selectedCell) {
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }
+  }, [selectedCell]);
+
+  // Prevent hydration mismatch: don't render until we know role is valid
+  if (isLoading || !isAuthorized) {
+    return null;
+  }
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -318,7 +345,7 @@ export default function FmDashboardPage() {
                 <ul className="space-y-4">
                   {selectedCell.comments.map((c, idx) => (
                     <li key={idx} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                      <p className="text-sm text-gray-900">“{c.text}”</p>
+                      <p className="text-sm text-gray-900 break-words">"{c.text}"</p>
                       <p className="mt-2 text-xs text-gray-500">{c.time}</p>
                     </li>
                   ))}

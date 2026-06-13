@@ -10,22 +10,41 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); // demo only
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // MVP stand-in for real SSO/Directory roles.
   const fmAllowlist = useMemo(
     () => new Set(["fm.john@accenture.com", "fm.jane@accenture.com"]),
     []
   );
 
   function handleSignIn() {
+    if (isLoading) return;
+    setIsLoading(true);
     setError(null);
 
     const cleaned = email.trim().toLowerCase();
-    if (!cleaned) return setError("Enter your email address.");
-    if (!cleaned.includes("@")) return setError("Enter a valid email address.");
-    if (!password) return setError("Enter your password.");
+    if (!cleaned) {
+      setError("Enter your email address.");
+      setIsLoading(false);
+      return;
+    }
+    if (!cleaned.includes("@")) {
+      setError("Enter a valid email address.");
+      setIsLoading(false);
+      return;
+    }
+    if (!password) {
+      setError("Enter your password.");
+      setIsLoading(false);
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      setIsLoading(false);
+      return;
+    }
 
     const role: Role = fmAllowlist.has(cleaned) ? "fm" : "worker";
     saveRole(role);
@@ -33,10 +52,15 @@ export default function LoginPage() {
     router.push(role === "fm" ? "/fm" : "/report");
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter" && !isLoading) {
+      handleSignIn();
+    }
+  }
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
       <div className="w-full max-w-md bg-white rounded-xl shadow p-6">
-        {/* Logo + app name */}
         <div className="flex items-center gap-2">
           <Image
             src="/accenture-logo1.png"
@@ -68,10 +92,13 @@ export default function LoginPage() {
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
               placeholder="your.name@accenture.com"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2
                          text-gray-900 placeholder:text-gray-400
-                        focus:outline-none focus:border-gray-600"
+                        focus:outline-none focus:border-gray-600
+                        disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -88,10 +115,13 @@ export default function LoginPage() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
               placeholder="Enter your password"
               className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2
                          text-gray-900 placeholder:text-gray-400
-                         focus:outline-none focus:border-gray-600"
+                         focus:outline-none focus:border-gray-600
+                         disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -103,17 +133,20 @@ export default function LoginPage() {
 
           <button
             onClick={handleSignIn}
+            disabled={isLoading}
             className="w-full rounded-lg px-4 py-3 font-medium text-white
-                       bg-purple-600 hover:bg-purple-700"
+                       bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {isLoading ? "Signing in..." : "Sign In"}
           </button>
 
-          <button className="w-full text-sm text-gray-500 underline underline-offset-2">
+          <button 
+            type="button"
+            disabled={isLoading}
+            className="w-full text-sm text-gray-500 underline underline-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Having trouble signing in?
           </button>
-          
-    
         </div>
       </div>
     </main>
