@@ -107,7 +107,8 @@ AWS Amplify was considered but not implemented for the MVP phase. Instead, I cho
 ## 5. Future Improvements
 
 - Migrate to real database (PostgreSQL/Firebase)
-- Implement organisational SSO (Azure AD/Okta)
+- Implement organisational SSO (Azure AD)
+- Enhanced password security (require uppercase, numbers, special characters)
 - Add long-term analytics for leadership
 - Build mobile app (iOS/Android)
 - Real-time notifications for FM
