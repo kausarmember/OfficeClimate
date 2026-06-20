@@ -1,9 +1,20 @@
 # OfficeClimate
 
+A web-based temperature feedback system that allows employees to report workspace comfort and helps Facilities Management identify temperature problem areas.
+
+---
+
 ## 1. Project Overview
 
-OfficeClimate is a web-based application that allows employees to report how the temperature feels at their workspace using simple comfort options: **Too Cold**, **Comfortable**, or **Too Warm**.  
-The application aggregates this feedback and presents it in a heatmap-style dashboard for Facilities Management (FM), enabling quick identification of temperature problem areas across the office.
+OfficeClimate enables employees to quickly report how the temperature feels at their workspace using three comfort options: Too Cold, Comfortable, or Too Warm. 
+Facilities Management uses the aggregated data in a heatmap dashboard to identify recurring temperature issues and prioritise maintenance actions.
+
+**Key Features:**
+- Simple one-click comfort reporting (< 1 minute)
+- Real-time heatmap by floor and zone
+- Historical data filtering by date
+- Keyboard accessible (Enter, Escape support)
+- Mobile-responsive design
 
 ### Target Audience
 - **Office workers** – to quickly report comfort levels with minimal disruption.
@@ -11,57 +22,92 @@ The application aggregates this feedback and presents it in a heatmap-style dash
 - **Senior Leadership (SLT)** – to understand workplace comfort trends and improve office utilisation.
 
 ### Problem Statement
-Temperature issues are currently reported informally and inconsistently, leading to repeated complaints, slow response times, and inefficient use of office space.  
-OfficeClimate provides structured, real-time data so that Facilities Management can act proactively and employees can work more comfortably.
+Temperature complaints are typically reported informally through multiple channels, leading to:
+- Inconsistent data collection
+- Delayed response times
+- Repeated complaints about the same areas
+- Inefficient resource allocation
 
+OfficeClimate centralises this feedback, providing structured data that enables Facilities Management to:
+- Identify recurring problem zones quickly
+- Prioritise maintenance actions
+- Measure intervention effectiveness
+- Improve overall workplace comfort
+  
 ---
 
 ## 2. Setup & Deployment Instructions
 
-### Clone the repository
+### Prerequisites
+- Node.js 18+ and npm
+- Git
+
+### Installation
 ```bash
-git clone https://github.com/kausarmember/OfficeClimate.git
+git clone https://github.com/yourusername/OfficeClimate.git
 cd OfficeClimate
-```
-### Install dependencies
-```bash
 npm install
-```
-### Run the app locally
-```bash
 npm run dev
 ```
-The application will be available at:
-[http://localhost:3000/](https://redesigned-space-waffle-97gq694p775vh7rxr-3000.app.github.dev/login)
 
+The application will be available at 'http://localhost:3000'
+
+### Test Credentials (MVP)
+
+**Office Worker:**
+- Email: `john@accenture.com`
+- Password: `password123`
+
+**FM User:**
+- Email: `fm.john@accenture.com`
+- Password: `password123`
+  
 ---
 
-## 3. Dependencies & SDKs
+## 3. Tech Stack & Dependencies 
 
-### Main Frameworks & Tools
-- **Next.js** – React framework for routing and rendering
-- **React** – UI component library
-- **TypeScript** – Static typing for improved code quality
-- **Tailwind CSS** – Utility-first styling framework
-- **Node.js** – Runtime environment
+### Frontend Framework
+- **Next.js** – React framework for routing, rendering, and API routes
+- **React** – UI component library for building interactive interfaces
+- **TypeScript** – Static typing for improved code quality and developer experience
+
+### Styling & UI
+- **Tailwind CSS** – Utility-first CSS framework for responsive design
+
+### State Management & Storage
+- **React Hooks** – Built-in state management (useState, useEffect, useMemo)
+- **Web Storage API (localStorage)** – Client-side data persistence for MVP
+
+### Development & Version Control
+- **Node.js** – JavaScript runtime environment
+- **npm** – Package manager
 - **Git & GitHub** – Version control and repository hosting
 
-### Storage & APIs
-- Web Storage API (localStorage) – Used for storing user roles and comfort reports (MVP approach)
+### Cloud Services (Considered but Not Used)
 
-### AWS/ Cloud Services
-- AWS Amplify: Not used in this project. Local storage was selected to keep the MVP lightweight and aligned with the module scope.
+AWS Amplify was considered but not implemented for the MVP phase. Instead, I chose **localStorage** for the following reasons:
+- Reduces infrastructure complexity and cost
+- Appropriate for MVP scope (learning project, small user base)
+- Enables faster development and deployment
+- Can be easily upgraded to cloud database (Firebase/PostgreSQL) in Phase 2
+
+**Future consideration:** Migration to AWS Amplify or equivalent is planned when scaling beyond MVP.
 
 ---
 
-## 4. Known Issues & Future Improvements
+## 4. Known Limitations 
 
-### Known Issues
-- Data is stored in localStorage, meaning reports are not shared across devices or browsers.
-- Authentication is simulated using an email allowlist rather than real organisational SSO.
+- Data stored in browser only – not shared across devices/browsers
+- Authentication via email allowlist (not real SSO)
+- Password validation basic (8+ characters minimum)
+- No database backups or recovery
 
-### Future Improvements
-- Integrate real authentication (e.g. organisational SSO).
-- Replace localStorage with a backend database for persistence and scalability.
-- Add long-term analytics and trend reporting for SLT.
-- Enhance accessibility further through keyboard-only navigation testing.
+---
+
+## 5. Future Improvements
+
+- Migrate to real database (PostgreSQL/Firebase)
+- Implement organisational SSO (Azure AD/Okta)
+- Add long-term analytics for leadership
+- Build mobile app (iOS/Android)
+- Real-time notifications for FM
